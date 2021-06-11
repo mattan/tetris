@@ -1,0 +1,31 @@
+#main{
+	width: 1000px;
+}
+#main div{
+	border: black 1px solid;
+	width: 18%;
+	float: left;
+	height: 100px;
+}
+
+#main div.I{
+	background: cyan;
+}
+#main div.O{
+	background: yellow;
+}
+#main div.T{
+	background: purple;
+}
+#main div.S{
+	background: green;
+}
+#main div.J{
+	background: blue;
+}
+#main div.Z{
+	background: red;
+}
+#main div.L{
+	background: orange;
+}
