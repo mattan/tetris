@@ -2,13 +2,36 @@ function stateHash(s)
 {
 	let hash="";
 	for(x of s)
-		for(y of s[x])
-			hash+=s[x][y]==" "?0:1;
+		for(y of x)
+			hash+=y==" "?0:1;
+	return hash;
 }
 
+possiableShapesHash = {};
+possiableShapes = [];
 
+function calcMoves(s){
+	for(let i=0;i<directionsFuctions.length;i++){
+		sNext=directionsFuctions[i](s);
+		if (!canAddShape(sNext))
+			continue;
+		if (possiableShapesHash[shapeHash(sNext)])
+			continue;
+		if (!(canAddShape(directionsFuctions[3](sNext)) || sNext.reduce(arraymin)[1]<0))			
+			possiableShapes.push(sNext);
+		possiableShapesHash[shapeHash(sNext)]=true;
+		calcMoves(sNext);
+	}
+}
 
-
+function calcAllMoves() {
+	possiableShapes = [];
+	possiableShapesHash = {};
+	calcMoves(currentShape);
+	possiableShapes.sort((a,b)=>shapeHash(a).localeCompare(shapeHash(b)))
+	options2=possiableShapes;
+	refresh();
+}
 
 
 
@@ -43,19 +66,24 @@ function act2(i)
 			return;
 		initFromOldstate();
 		addShape(currentShape);
-		refresh();
+		calcAllMoves();
+		//refresh();
 	}
 }
 
 
+// click on shape
 let index = 0;
-function act()
+function act(i)
 {
-	currentShape = fmove([0,-3])(shapes[index]);
-	initFromOldstate();
-	addShape(currentShape);
-	index++;
-	refresh();
+	return ()=>{
+		index=i;
+		currentShape = fmove([0,-3])(shapes[index]);
+		initFromOldstate();
+		addShape(currentShape);
+		calcAllMoves();
+		//refresh();
+	}
 }
 
 function addShape(s){
@@ -70,7 +98,9 @@ function addAtom([x,y]){
 
 function lockShape(){
 	removeLines();
-	act();
+	//act();
+	options2 = shapes;
+	refresh();
 }
 
 

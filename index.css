@@ -7,6 +7,9 @@
 	float: left;
 	height: 100px;
 }
+#main div div{
+	height: 18px;
+}
 
 #main div.I{
 	background: cyan;

@@ -23,11 +23,16 @@ let oldstate =
 let shapesNames = ["I","O","T","S","J","Z","L"]
 let shapeSize=4;
 let shapes = []
+let options2 = []
 let directionsNames = ["<",">","^","V","\\","/"]
 let directionsFuctions = [fmove([-1,0]),fmove([1,0]),fmove([0,-1]),fmove([0,1]),frotShapeN(1),frotShapeN(3)]
 
 
+let start = Date.now()
+let shapesHash={};
 initShapes([[0,0]]);
+options2 = shapes;
+console.log(`initShapes took ${Date.now()-start}ms`); 
 
 
 function initFromOldstate(){
@@ -95,6 +100,14 @@ function init_centerShape(x){
 	
 }
 
+function shapeHash(s)
+{
+	let hash="";
+	for(x of s)
+		for(y of x)
+			hash+=y;
+	return hash;
+}
 function init_addShape(x){
 	x = init_centerShape(x)
 	for (let i=0;i<x.length-1;i++)
@@ -103,13 +116,14 @@ function init_addShape(x){
 	for(i=0;i<4;i++){
 		x = x.map(frotN(1,[0,0]));
 		x = init_centerShape(x)
-		
+
 		for(let j=0;j<shapes.length;j++){
 			if (arrayequals(shapes[j],x))
 				return;
 		}
 	}
 	shapes.push(x);
+	shapesHash[shapeHash(x)]=true;
 }
 
 function initShapes(x){
